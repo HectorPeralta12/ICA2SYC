@@ -68,14 +68,26 @@
   (let [valid-trucks
         (filter (fn [[tid {:keys [capacity load location]}]]
                   (and (>= (- capacity load) amount)
-                       (not= location nil)))
+                       (= location from)))
                 @trucks)]
-    (when (seq valid-trucks)
+    (if (seq valid-trucks)
       (->> valid-trucks
-           (sort-by (fn [[_ {:keys [location]}]]
-                      (if (= location from) 0
-                                            (count (a-star location from)))))
-           first))))
+           (sort-by (fn [[_ {:keys [load]}]] load))
+           first)
+      (let [nearby-trucks
+            (filter (fn [[tid {:keys [capacity load location]}]]
+                      (and (>= (- capacity load) amount)
+                           (some (fn [[neighbor dist]] (= neighbor location))
+                                 (get graph from))))
+                    @trucks)]
+        (when (seq nearby-trucks)
+          (->> nearby-trucks
+               (sort-by (fn [[tid {:keys [load location]}]]
+                          [(+ load (or (some (fn [[neighbor dist]] (when (= neighbor location) dist))
+                                             (get graph from))
+                                       Integer/MAX_VALUE))
+                           load]))
+               first))))))
 
 ;; ---------------------------------------------------------
 ;; 4. Deliveries with alternative routes
