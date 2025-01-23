@@ -23,14 +23,17 @@
    :prague  [[:warsaw 500] [:krakow 600] [:hamburg 300] [:munich 300] [:brno 100] [:berlin 200]]
    :berlin  [[:warsaw 300] [:krakow 400] [:hamburg 100] [:munich 100] [:brno 300] [:prague 200]]})
 
+
 (def trucks
   (atom {:truck1 {:capacity 50 :load 0 :location :warsaw}
-         :truck2 {:capacity 50 :load 0 :location :warsaw}}))
+         :truck2 {:capacity 50 :load 0 :location :berlin}}))
+
 
 (def daily-routes
-  {1 [[:warsaw :brno 50] [:warsaw :krakow 20]]
-   2 [[:warsaw :prague 15]]
-   3 [[:warsaw :hamburg 40]]})
+  {1 [[:berlin :brno 50] [:warsaw :krakow 20]]
+   2 [[:brno :prague 15]]
+   3 [[:berlin :hamburg 40]]})
+
 
 ;; ---------------------------------------------------------
 ;; 2. Function A-star for getting the shortest route
