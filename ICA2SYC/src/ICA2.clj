@@ -1,6 +1,4 @@
-(ns ICA2
-  (:import [java.time LocalDateTime]
-           [java.time.format DateTimeFormatter]))
+(ns ICA2)
 
 ;; ---------------------------------------------------------
 ;; 1. Data about cities, trucks, and daily routes, etc.
