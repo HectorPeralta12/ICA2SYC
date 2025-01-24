@@ -86,6 +86,7 @@
           (if (= current goal)
             path
             (do
+              ;; Current city is moved from open-set to closed-set after evaluating its neighbors
               (swap! open-set dissoc current)
               (swap! closed-set conj current)
               (doseq [[neighbor distance] (get graph current)]
@@ -138,6 +139,7 @@
                     @trucks)]
         (when (seq nearby-trucks)
           (->> nearby-trucks
+               ;; Nearby trucks are sorted by total load and proximity to ensure the most efficient allocation 
                (sort-by (fn [[tid {:keys [load location]}]]
                           [(+ load (or (some (fn [[neighbor dist]] (when (= neighbor location) dist))
                                              (get graph from))
